@@ -6,14 +6,14 @@ program approximation
     logical :: isFirstIteration
     LEFT = 1.0
     RIGHT = 2.0
-    h = (RIGHT - LEFT) / N
+    h = (RIGHT - LEFT) / real(N)
 
     ! Initialize arrays
     allocate(X(N+1))
     allocate(Y(N+1))
 
     do i = 1, N + 1
-        X(i) = LEFT + (i - 1) * h
+        X(i) = LEFT + real(i - 1) * h
     end do
     write (*, '(a)') 'Welcome. This program is designed to approximate function by polinom.'
     print *
@@ -93,6 +93,7 @@ contains
 
 
     real function getPolinomValue(point, array, degree)
+        implicit none
         real, intent(in) :: point
         integer :: i
         integer, intent(in) :: degree
@@ -105,6 +106,7 @@ contains
     end function getPolinomValue
 
     subroutine getGradient(degree, N, X, Y, polinom, gradient)
+        implicit none
         integer, intent(in) :: degree, N
         real, dimension(:), intent(in) :: X, Y, polinom
         real, dimension(:), intent(out) :: gradient
@@ -119,6 +121,7 @@ contains
     end subroutine getGradient
 
     real function getAverageSquareError(array, X, Y, N, degree)
+        implicit none
         real, dimension(:), intent(in) :: array, X, Y
         integer, intent(in) :: N, degree
         integer :: i
@@ -130,6 +133,7 @@ contains
     end function getAverageSquareError
 
     subroutine getVector(isFirstIteration, gradient, vector, degree, N, X, Y, polinom)
+        implicit none
         logical, intent(in) :: isFirstIteration
         real, dimension(:), intent(in) :: X, Y, polinom
         real, dimension(:), intent(inout) :: gradient, vector
@@ -138,15 +142,16 @@ contains
 
         if (isFirstIteration) then
             call getGradient(degree, N, X, Y, polinom, gradient)
-            vector = (-1) * gradient
+            vector = (-1.0) * gradient
         else
             t = dot_product(gradient, gradient)
             call getGradient(degree, N, X, Y, polinom, gradient)
-            vector = (-1) * gradient + (dot_product(gradient, gradient) / t) * vector
+            vector = (-1.0) * gradient + (dot_product(gradient, gradient) / t) * vector
         end if
     end subroutine getVector
 
     real function getLambda(polinom, vector, X, Y, N, degree)
+        implicit none
         real, dimension(:), intent(in) :: polinom, vector
         real, dimension(:), intent(in) :: X, Y
         integer, intent(in) :: N, degree
@@ -159,6 +164,7 @@ contains
     end function getLambda
 
     real function getSigma(tmp, polinom, degree)
+        implicit none
         real, dimension(:), intent(in) :: polinom
         real, dimension(:) :: tmp
         integer, intent(in) :: degree
@@ -168,7 +174,7 @@ contains
         tmp = tmp - polinom
         getSigma = 1000
         do i = 1, degree + 1
-            if (polinom(i) /= 0) then
+            if (polinom(i) > 0 .or. polinom(i) < 0) then ! polinom(i) != 0
                 t = abs(tmp(i) / polinom(i))
                 if (t < getSigma) then
                     getSigma = t
@@ -179,6 +185,7 @@ contains
 
     ! Функции getTargetFunctionValues и getTestFunctionValues уже определены правильно
     subroutine getTargetFunctionValues(X, Y, N)
+        implicit none
         integer :: N, i
         real, dimension(N) :: X, Y
 
@@ -188,6 +195,7 @@ contains
     end subroutine getTargetFunctionValues
 
     subroutine getTestFunctionValues(X, Y, N)
+        implicit none
         integer :: N, i
         real, dimension(N) :: X, Y
 

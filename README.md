@@ -1,24 +1,33 @@
-# function_approximation
+# Function Approximation
 
-This program is a simple implementation of function approximation using gradient descent. The program is written in Fortran 90.
+This program is a simple implementation of function approximation using gradient descent. It is written in Fortran 90.
 
-## Usage
+## Compilation
 
-The program is compiled using the following command:
-    
+You can compile the program in one of the following ways:
+
+1. Using the direct command:
     ```bash
     gfortran -o approximation approximation.f90
     ```
-    or using the makefile:
+
+2. Using the provided makefile:
     ```bash
-    make 
+    make
     ```
-    The program is executed using the following command:
+
+## Execution
+
+After compilation, you can run the program using:
+
+1. Direct command:
     ```bash
     ./approximation
     ```
-    or using the makefile:
+
+2. Using the makefile:
     ```bash
     make run
     ```
 
+Ensure you have the required compiler installed and the make tool available on your system.
